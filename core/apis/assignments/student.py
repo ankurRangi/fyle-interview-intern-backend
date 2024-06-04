@@ -5,6 +5,7 @@ from core.apis.responses import APIResponse
 from core.models.assignments import Assignment
 
 from .schema import AssignmentSchema, AssignmentSubmitSchema
+from core.libs.exceptions import FyleError
 student_assignments_resources = Blueprint('student_assignments_resources', __name__)
 
 
@@ -22,6 +23,12 @@ def list_assignments(p):
 @decorators.authenticate_principal
 def upsert_assignment(p, incoming_payload):
     """Create or Edit an assignment"""
+
+    # If empty/null data
+    content = incoming_payload.get('content')
+    if content is None:
+        raise FyleError(status_code=400, message='content is missing')
+    
     assignment = AssignmentSchema().load(incoming_payload)
     assignment.student_id = p.student_id
 

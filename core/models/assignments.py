@@ -48,6 +48,10 @@ class Assignment(db.Model):
         if assignment_new.id is not None:
             assignment = Assignment.get_by_id(assignment_new.id)
             assertions.assert_found(assignment, 'No assignment with this id was found')
+
+            # check to verify, student can update his/her own assignments only.
+            assertions.assert_valid(assignment.student_id == assignment_new.student_id, 
+                                    'This assignment belongs to some other student')
             assertions.assert_valid(assignment.state == AssignmentStateEnum.DRAFT,
                                     'only assignment in draft state can be edited')
 
@@ -76,6 +80,10 @@ class Assignment(db.Model):
     def mark_grade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
+
+        # Teacher can mark grade his/her own assignments only.
+        assertions.assert_valid(assignment.teacher_id == auth_principal.teacher_id, 
+                                'assignment assigned to a different teacher')
         assertions.assert_valid(grade is not None, 'assignment with empty grade cannot be graded')
 
         assignment.grade = grade
@@ -89,5 +97,5 @@ class Assignment(db.Model):
         return cls.filter(cls.student_id == student_id).all()
 
     @classmethod
-    def get_assignments_by_teacher(cls):
-        return cls.query.all()
+    def get_assignments_by_teacher(cls, teacher_id):
+        return cls.filter(cls.teacher_id == teacher_id).all()

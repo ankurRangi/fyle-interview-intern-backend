@@ -1,0 +1,38 @@
+1. Fork and Git clone
+2. Ran basic commands mentioned in the README.md
+
+3. Bash run.sh file doesn't work on windows.
+
+    ALTERNATIVE
+    -----------
+    3.1. Ran if via docker it is compatiable with Gunicorn.
+    3.2. Made a Dockerfile and created a docker image.
+    3.3. Used the image to create a contaier via docker-compose file.
+    3.4. Still couldn't work around with bash file and started having inconsistancy with the db migrations.
+
+4. Decided to ran it simply via creating an environment valiable and exported the Flask application instance. 
+5. flask run.
+
+6. Server was running fine. Check the first API with the headers to re verify. Everthing was working fine.
+7. Had a basic understanding of the project from the details mentioned in the assignment so started understanding
+    the code base and its work flow.
+
+8. Started with understand the models, class functions, decorators, schemeas, helper functions.
+
+
+
+
+
+
+
+
+
+Bugs List:
+---------
+1. Any student can update any assignment in the draft category.
+2. Null/empty content can be stored. 
+    2.1. Changing it in models to (nullable=Flase) will create issues in migrations as there are already some of the 
+        Null content present which is graded and cannot be updated now.
+3. Teacher can view all the assignment including not assigned to anyone.
+4. Teacher can grade any assignment even if not assigned.
+5. 
