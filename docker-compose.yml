@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  web:
+    # Building the image using the Dockerfile in the current directory
+    build: .
+    ports:
+      - "5000:5000"
+    # Container data
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=core/server.py
+    # Overriding the CMD in Dockerfile (Gunicorn incompatiable with windows)
+    command: flask run --port=5000
