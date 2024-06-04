@@ -1,11 +1,11 @@
 1. Fork and Git clone
 2. Ran basic commands mentioned in the README.md
 
-3. Bash run.sh file doesn't work on windows.
+3. Bash run.sh file doesn't work on windows os.
 
     ALTERNATIVE
     -----------
-    3.1. Ran if via docker it is compatiable with Gunicorn.
+    3.1. Ran it via docker since it is compatiable with Gunicorn.
     3.2. Made a Dockerfile and created a docker image.
     3.3. Used the image to create a contaier via docker-compose file.
     3.4. Still couldn't work around with bash file and started having inconsistancy with the db migrations.
@@ -13,19 +13,11 @@
 4. Decided to ran it simply via creating an environment valiable and exported the Flask application instance. 
 5. flask run.
 
-6. Server was running fine. Check the first API with the headers to re verify. Everthing was working fine.
+6. Server was running fine. Checked the first API with the headers to re verify. Everthing was working fine.
 7. Had a basic understanding of the project from the details mentioned in the assignment so started understanding
     the code base and its work flow.
 
 8. Started with understand the models, class functions, decorators, schemeas, helper functions.
-
-
-
-
-
-
-
-
 
 Bugs List:
 ---------
@@ -33,6 +25,21 @@ Bugs List:
 2. Null/empty content can be stored. 
     2.1. Changing it in models to (nullable=Flase) will create issues in migrations as there are already some of the 
         Null content present which is graded and cannot be updated now.
-3. Teacher can view all the assignment including not assigned to anyone.
-4. Teacher can grade any assignment even if not assigned.
-5. 
+3. Can submit/resubmit an assignment with any category (Draft, submitted, gradded)
+4. Teacher can view all the assignment including not assigned to anyone.
+5. Teacher can grade any assignment even if not assigned.
+6. Principal can grade any assignment even when no teacher is assigned (Not solved since not sure what to assign)
+
+Old APIs Updated:
+----------------
+1. GET /student/assignments
+2. POST /student/assignments -> BUG 01 Solved, BUG 02 Solved (ALT), 
+3. POST /student/assignments/submit ->  BUG 03 Solved
+4. GET /teacher/assignments -> BUG 04 Solved.
+5. POST /teacher/assignments/grade -> BUG 05 Solved
+
+New APIs List:
+-------------
+1. GET /principal/assignments -> List all submitted and graded assignments
+2. GET /principal/teachers -> List all the teachers
+3. POST /principal/assignments/grade -> Grade or re-grade an assignment
