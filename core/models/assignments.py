@@ -74,6 +74,7 @@ class Assignment(db.Model):
 
 
         assignment.teacher_id = teacher_id
+        assignment.state = AssignmentStateEnum.SUBMITTED
         db.session.flush()
 
         return assignment
