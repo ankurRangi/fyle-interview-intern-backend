@@ -60,3 +60,15 @@ def test_regrade_assignment(client, h_principal):
 
     assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
     assert response.json['data']['grade'] == GradeEnum.B
+
+def test_grade_assignment_with_bad_id(client, h_principal):
+    response = client.post(
+        '/principal/assignments/grade',
+        json={
+            'id': 420,
+            'grade': GradeEnum.D.value
+        },
+        headers=h_principal
+    )
+    assert response.status_code == 404
+    assert response.json['error'] == 'FyleError'

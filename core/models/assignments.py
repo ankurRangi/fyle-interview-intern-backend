@@ -70,7 +70,7 @@ class Assignment(db.Model):
         assertions.assert_valid(assignment.student_id == auth_principal.student_id, 'This assignment belongs to some other student')
         assertions.assert_valid(assignment.content is not None, 'assignment with empty content cannot be submitted')
         # Only drafts can be summitted
-        assertions.assert_valid(assignment.state == AssignmentStateEnum.DRAFT, 'assignment in draft category can only be submitted')
+        assertions.assert_valid(assignment.state == AssignmentStateEnum.DRAFT, 'only a draft assignment can be submitted')
 
 
         assignment.teacher_id = teacher_id
@@ -84,8 +84,8 @@ class Assignment(db.Model):
     def mark_grade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
-
-        # Teacher can mark grade his/her own assignments only.
+        assertions.assert_valid(assignment.state != AssignmentStateEnum.DRAFT, 'assignment in draft category cannot be graded')
+        # Teacher can mark grade his/her own assignments only (if id provided).
         if auth_principal.teacher_id is not None:
             assertions.assert_valid(assignment.teacher_id == auth_principal.teacher_id, 
                                 'assignment assigned to a different teacher')            

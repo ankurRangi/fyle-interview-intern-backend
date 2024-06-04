@@ -19,6 +19,8 @@
 
 8. Started with understand the models, class functions, decorators, schemeas, helper functions.
 
+9. I changed some data to cross check and after completing the api when i was running the test it was showing FAILED. I started looking for bugs which weren't there any. Updated assignment state to "graded" and when the test ran for ID=4 to check if principal can update the grade of a submitted category or not it failed since it was already a graded 
+
 Bugs List:
 ---------
 1. Any student can update any assignment in the draft category.
@@ -29,6 +31,7 @@ Bugs List:
 4. Teacher can view all the assignment including not assigned to anyone.
 5. Teacher can grade any assignment even if not assigned.
 6. Principal can grade any assignment even when no teacher is assigned (Not solved since not sure what to assign)
+7. Principal can grade assignment even in draft category.
 
 Old APIs Updated:
 ----------------
@@ -36,10 +39,21 @@ Old APIs Updated:
 2. POST /student/assignments -> BUG 01 Solved, BUG 02 Solved (ALT), 
 3. POST /student/assignments/submit ->  BUG 03 Solved
 4. GET /teacher/assignments -> BUG 04 Solved.
-5. POST /teacher/assignments/grade -> BUG 05 Solved
+5. POST /teacher/assignments/grade -> BUG 05 Solved, BUG 07 Solved
 
 New APIs List:
 -------------
 1. GET /principal/assignments -> List all submitted and graded assignments
 2. GET /principal/teachers -> List all the teachers
 3. POST /principal/assignments/grade -> Grade or re-grade an assignment
+
+Assumption:
+----------
+1. A teacher can also re-grade an assignment already graded just like the principal. [Added test case]
+
+
+Test Case Added:
+---------------
+1. test_grade_assignment_with_bad_id
+2. test_grade_assignment_regrade
+3. test_grade_submitted_assignment
