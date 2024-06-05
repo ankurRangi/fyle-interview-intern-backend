@@ -102,36 +102,36 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
 
     assert data['error'] == 'FyleError'
 
-def test_grade_assignment_regrade(client, h_teacher_1):
+def test_grade_assignment_regrade(client, h_teacher_2):
     """
     Re-grade an assignment already graded assuming it is allowed for rechecking
-    """
-    response = client.post(
-        '/teacher/assignments/grade',
-        headers=h_teacher_1
-        , json={
-            "id": 1,
-            "grade": "D"
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
-    assert response.json['data']['grade'] == GradeEnum.D
-
-def test_grade_submitted_assignment(client, h_teacher_2):
-    """
-    Grade an ungraded but submitted assignment
     """
     response = client.post(
         '/teacher/assignments/grade',
         headers=h_teacher_2
         , json={
             "id": 2,
-            "grade": GradeEnum.D.value
+            "grade": "C"
         }
     )
 
     assert response.status_code == 200
     assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
-    assert response.json['data']['grade'] == GradeEnum.D
+    assert response.json['data']['grade'] == GradeEnum.C
+
+def test_grade_submitted_assignment(client, h_teacher_1):
+    """
+    Grade an ungraded but submitted assignment
+    """
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1
+        , json={
+            "id": 1,
+            "grade": GradeEnum.A.value
+        }
+    )
+
+    assert response.status_code == 200
+    assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
+    assert response.json['data']['grade'] == GradeEnum.A

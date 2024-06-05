@@ -1,11 +1,12 @@
 import random
 from sqlalchemy import text
+from sqlalchemy import func
 
 from core import db
 from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
 
 
-def create_n_graded_assignments_for_teacher(number: int = 0, teacher_id: int = 1) -> int:
+def create_n_graded_assignments_for_teacher(number, teacher_id) -> int:
     """
     Creates 'n' graded assignments for a specified teacher and returns the count of assignments with grade 'A'.
 
@@ -52,30 +53,27 @@ def create_n_graded_assignments_for_teacher(number: int = 0, teacher_id: int = 1
 
 def test_get_assignments_in_graded_state_for_each_student():
     """Test to get graded assignments for each student"""
-
-    # Find all the assignments for student 1 and change its state to 'GRADED'
-    submitted_assignments: Assignment = Assignment.filter(Assignment.student_id == 1)
-
-    # Iterate over each assignment and update its state
-    for assignment in submitted_assignments:
-        assignment.state = AssignmentStateEnum.GRADED  # Or any other desired state
-
-    # Flush the changes to the database session
-    db.session.flush()
-    # Commit the changes to the database
-    db.session.commit()
-
-    # Define the expected result before any changes
-    expected_result = [(1, 3)]
+    
+    # Gets the grade count using the filter query of sqlalchemy
+    expected_grade_count = db.session.query( 
+                                            Assignment.student_id, 
+                                            func.count(Assignment.grade).label('gradeCount')
+                                            ).filter(
+                                                Assignment.state == AssignmentStateEnum.GRADED
+                                                ).group_by(
+                                                    Assignment.student_id
+                                                    ).all()
+        
 
     # Execute the SQL query and compare the result with the expected result
     with open('tests/SQL/number_of_graded_assignments_for_each_student.sql', encoding='utf8') as fo:
         sql = fo.read()
-
+        
     # Execute the SQL query compare the result with the expected result
     sql_result = db.session.execute(text(sql)).fetchall()
-    for itr, result in enumerate(expected_result):
-        assert result[0] == sql_result[itr][0]
+    for itr, assignment in enumerate(expected_grade_count):
+        assert assignment.student_id == sql_result[itr][0]
+        assert assignment.gradeCount == sql_result[itr][1]
 
 
 def test_get_grade_A_assignments_for_teacher_with_max_grading():
@@ -86,14 +84,14 @@ def test_get_grade_A_assignments_for_teacher_with_max_grading():
         sql = fo.read()
 
     # Create and grade 5 assignments for the default teacher (teacher_id=1)
-    grade_a_count_1 = create_n_graded_assignments_for_teacher(5)
+    grade_a_count_1 = create_n_graded_assignments_for_teacher(5, 1)
     
     # Execute the SQL query and check if the count matches the created assignments
     sql_result = db.session.execute(text(sql)).fetchall()
     assert grade_a_count_1 == sql_result[0][0]
 
     # Create and grade 10 assignments for a different teacher (teacher_id=2)
-    grade_a_count_2 = create_n_graded_assignments_for_teacher(10, 2)
+    grade_a_count_2 = create_n_graded_assignments_for_teacher(12, 2)
 
     # Execute the SQL query again and check if the count matches the newly created assignments
     sql_result = db.session.execute(text(sql)).fetchall()
