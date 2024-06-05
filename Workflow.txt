@@ -13,14 +13,6 @@
 4. Decided to ran it simply via creating an environment valiable and exported the Flask application instance. 
 5. flask run.
 
-6. Server was running fine. Checked the first API with the headers to re verify. Everthing was working fine.
-7. Had a basic understanding of the project from the details mentioned in the assignment so started understanding
-    the code base and its work flow.
-
-8. Started with understand the models, class functions, decorators, schemeas, helper functions.
-
-9. I changed some data to cross check and after completing the api when i was running the test it was showing FAILED. I started looking for bugs which weren't there any. Updated assignment state to "graded" and when the test ran for ID=4 to check if principal can update the grade of a submitted category or not it failed since it was already a graded 
-
 Bugs List:
 ---------
 1. Any student can update any assignment in the draft category.
