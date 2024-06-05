@@ -3,11 +3,11 @@ from core.apis import decorators
 from core.apis.responses import APIResponse
 from core.models.teachers import Teacher
 
-from .schema import TeacherSchema
+from core.apis.teachers.schema import TeacherSchema
 
-principal_teacher_resources = Blueprint('principal_teacher_resources', __name__)
+principal_assignments_resources_v1 = Blueprint('principal_assignments_resources_v1', __name__)
 
-@principal_teacher_resources.route('/teachers', methods=['GET'], strict_slashes=False)
+@principal_assignments_resources_v1.route('/teachers', methods=['GET'], strict_slashes=False)
 @decorators.authenticate_principal
 def list_teachers(p):
     """Returns list of all the teachers"""

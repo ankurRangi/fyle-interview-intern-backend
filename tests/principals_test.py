@@ -73,3 +73,10 @@ def test_grade_assignment_with_bad_id(client, h_principal):
     assert response.status_code == 404
     assert response.json['error'] == 'FyleError'
     
+def test_list_teacher_all(client, h_principal):
+    """Get the list of all the teachers"""
+    response = client.get(
+        '/principal/teachers',
+        headers=h_principal
+    )
+    assert response.status_code == 200

@@ -51,9 +51,9 @@ Assumption:
 ----------
 1. A teacher can also re-grade an assignment already graded just like the principal. [Added test case]
 
-
 Test Case Added:
 ---------------
 1. test_grade_assignment_with_bad_id
 2. test_grade_assignment_regrade
 3. test_grade_submitted_assignment
+4. test_list_teacher_all
